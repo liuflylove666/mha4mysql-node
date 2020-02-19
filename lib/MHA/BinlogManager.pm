@@ -366,7 +366,8 @@ sub is_binlog_head_readable($) {
   my $file = shift;
 
   # higher than binlog file header (4 bytes)
-  return system("$self->{mysqlbinlog} --stop-position=5 $file > /dev/null");
+  my $command = "source /etc/profile && $self->{mysqlbinlog} --no-defaults --stop-position=5 $file > /dev/null";
+  return system($command);
 }
 
 sub get_end_binlog_fde($$$) {
@@ -525,7 +526,7 @@ sub dump_mysqlbinlog($$$$$$) {
     "echo \"# Binary/Relay log file $from_file started\" >> $out_diff_file";
   system($command);
 
-  $command = "$self->{mysqlbinlog} --start-position=$from_pos ";
+  $command = "source /etc/profile && $self->{mysqlbinlog} --no-defaults --start-position=$from_pos ";
   if ($suppress_row_format) {
     $command .= " --base64-output=never";
   }
