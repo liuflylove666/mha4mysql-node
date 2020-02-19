@@ -103,7 +103,7 @@ sub init_mysqlbinlog($) {
     unless ( $self->{mysql_version} ) {
       croak "mysql version not found.\n";
     }
-    my $v = `$self->{mysqlbinlog} --version`;
+    my $v = `$self->{mysqlbinlog} --no-defaults --version`;
     my ( $high, $low ) = MHA::NodeUtil::system_rc($?);
     if ( $high || $low ) {
       croak "$self->{mysqlbinlog} version command failed with rc $high:$low, "
